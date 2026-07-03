@@ -1,3 +1,4 @@
+
 // ऐप का शुरुआती स्टेट सेट करना
 let currentState = { page: 'home', paper: '' };
 
@@ -132,19 +133,35 @@ function goToSection(sectionName, updateHistory = true) {
             </div>
         `;
     } else if (sectionName === 'Syllabus') {
-        html += `
-            <div style="background: var(--card-bg); padding: 15px; border-radius: 12px; font-size: 14px; line-height: 1.6; border: 1px solid #233565;">
-                <b style="color: var(--gold);">परीक्षा पैटर्न:</b><br>
-                • कुल प्रश्न: 50 | कुल अंक: 100<br>
-                • नेगेटिव मार्किंग: लागू
-            </div>
-        `;
+        if (paperType === 'Technical') {
+            html += `
+                <div style="background: var(--card-bg); padding: 15px; border-radius: 12px; font-size: 14px; line-height: 1.6; border: 1px solid #233565;">
+                    <b style="color: var(--gold);">परीक्षा पैटर्न (Technical):</b><br>
+                    • कुल प्रश्न: 50 | कुल अंक: 200<br>
+                    • सही उत्तर: +4 अंक<br>
+                    <b style="color: #ef4444;">• नेगेटिव मार्किंग: -1 अंक (प्रत्येक गलत उत्तर पर)</b><br><br>
+                    <b style="color: var(--gold);">विषय विवरण:</b><br>
+                    GK (5 प्रश्न), Maths (15 प्रश्न), Physics (15 प्रश्न), Chemistry (15 प्रश्न)
+                </div>
+            `;
+        } else {
+            html += `
+                <div style="background: var(--card-bg); padding: 15px; border-radius: 12px; font-size: 14px; line-height: 1.6; border: 1px solid #233565;">
+                    <b style="color: var(--gold);">परीक्षा पैटर्न (${paperType}):</b><br>
+                    • कुल प्रश्न: 50 | कुल अंक: 100<br>
+                    • सही उत्तर: +2 अंक<br>
+                    <b style="color: #ef4444;">• नेगेटिव मार्किंग: -0.5 अंक (प्रत्येक गलत उत्तर पर)</b><br><br>
+                    <b style="color: var(--gold);">विषय विवरण:</b><br>
+                    GK (15 प्रश्न), Science (15 प्रश्न), Maths (15 प्रश्न), Reasoning (5 प्रश्न)
+                </div>
+            `;
+        }
     }
 
     app.innerHTML = html;
 }
 
-// 📱 फोन के असली बैक बटन को ट्रैक करने का सबसे तगड़ा लॉजिक
+// 📱 फोन के असली बैक बटन को ट्रैक करने का लॉजिक
 window.addEventListener('popstate', function(event) {
     if (event.state) {
         if (event.state.page === 'home') {
@@ -159,5 +176,5 @@ window.addEventListener('popstate', function(event) {
     }
 });
 
-// पहली बार बिना हिस्ट्री बिगाड़े होम स्क्रीन लोड करना
+// पहली बार होम स्क्रीन लोड करना
 loadHomeScreen(false);
