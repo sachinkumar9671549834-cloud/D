@@ -1,14 +1,19 @@
+let currentState = { page: 'home', paper: '' };
 
-let currentPaper = ''; 
+function loadHomeScreen(updateHistory = true) {
+    currentState = { page: 'home', paper: '' };
+    
+    // ब्राउज़र हिस्ट्री में स्टेट सेव करना ताकि फोन का बैक बटन काम करे
+    if (updateHistory) {
+        history.pushState({ page: 'home' }, '');
+    }
 
-function loadHomeScreen() {
-    currentPaper = '';
     const app = document.getElementById('app');
     app.innerHTML = `
         <div class="app-title">INDIAN ARMY</div>
         <div class="app-subtitle">AGNIVEER EXAM PORTAL 2026</div>
 
-        <!-- डिब्बा 1: Army Agniveer GD -->
+        <!-- विकल्प 1: Army Agniveer GD -->
         <div class="paper-card" id="card-GD" onclick="selectPaper('GD')">
             <div class="icon-badge">GD</div>
             <div style="flex-grow: 1;">
@@ -18,7 +23,7 @@ function loadHomeScreen() {
             <div style="color: var(--gold); font-size: 14px;">चुनें ➔</div>
         </div>
 
-        <!-- डिब्बा 2: Army Agniveer Tradesman -->
+        <!-- विकल्प 2: Army Agniveer Tradesman -->
         <div class="paper-card" id="card-TM" onclick="selectPaper('Tradesman')">
             <div class="icon-badge">TM</div>
             <div style="flex-grow: 1;">
@@ -27,23 +32,35 @@ function loadHomeScreen() {
             </div>
             <div style="color: var(--gold); font-size: 14px;">चुनें ➔</div>
         </div>
+
+        <!-- विकल्प 3: Army Agniveer Technical -->
+        <div class="paper-card" id="card-TECH" onclick="selectPaper('Technical')">
+            <div class="icon-badge">TECH</div>
+            <div style="flex-grow: 1;">
+                <h3 style="margin: 0; font-size: 16px;">Army Agniveer Technical</h3>
+                <p style="margin: 4px 0 0 0; color: var(--text-muted); font-size: 12px;">PCM और टेक्निकल विशेष टेस्ट</p>
+            </div>
+            <div style="color: var(--gold); font-size: 14px;">चुनें ➔</div>
+        </div>
     `;
 }
 
-// क्लिक करने पर केवल चुना हुआ कार्ड ऊपर दिखेगा और दूसरा गायब हो जाएगा
-function selectPaper(paperType) {
-    currentPaper = paperType;
+function selectPaper(paperType, updateHistory = true) {
+    currentState = { page: 'options', paper: paperType };
+    
+    if (updateHistory) {
+        history.pushState({ page: 'options', paper: paperType }, '');
+    }
+
     const app = document.getElementById('app');
     
-    let displayName = paperType === 'GD' ? 'Army Agniveer GD' : 'Army Agniveer Tradesman';
-    let badgeText = paperType === 'GD' ? 'GD' : 'TM';
-    let subText = paperType === 'GD' ? 'Full Mock, Subjects, Syllabus' : '8th & 10th पास विशेष टेस्ट';
+    let displayName = `Army Agniveer ${paperType}`;
+    let badgeText = paperType === 'GD' ? 'GD' : paperType === 'Tradesman' ? 'TM' : 'TECH';
+    let subText = paperType === 'GD' ? 'Full Mock, Subjects, Syllabus' : paperType === 'Tradesman' ? '8th & 10th पास विशेष टेस्ट' : 'PCM और टेक्निकल विशेष टेस्ट';
 
     app.innerHTML = `
-        <button class="back-btn" onclick="loadHomeScreen()">⬅ मुख्य स्क्रीन पर जाएँ</button>
-        
-        <!-- केवल चुना हुआ डिब्बा एक्टिव लुक में दिखेगा -->
-        <div class="paper-card active" style="cursor: default;">
+        <!-- स्क्रीन वाला बैक बटन अब हटा दिया गया है, यहाँ सिर्फ मुख्य कार्ड दिखेगा -->
+        <div class="paper-card active" style="cursor: default; margin-top: 10px;">
             <div class="icon-badge">${badgeText}</div>
             <div style="flex-grow: 1;">
                 <h3 style="margin: 0; font-size: 16px;">${displayName}</h3>
@@ -51,7 +68,6 @@ function selectPaper(paperType) {
             </div>
         </div>
 
-        <!-- 44322.jpg वाले 4 मुख्य ऑप्शन्स ग्रिड -->
         <div class="options-grid">
             <div class="opt-box" onclick="goToSection('Mock Test')">
                 <div class="opt-icon">📝</div>
@@ -73,14 +89,19 @@ function selectPaper(paperType) {
     `;
 }
 
-// अंदर के सेक्शन्स की स्क्रीन खोलना
-function goToSection(sectionName) {
+function goToSection(sectionName, updateHistory = true) {
+    const paperType = currentState.paper;
+    currentState = { page: 'section', paper: paperType, section: sectionName };
+    
+    if (updateHistory) {
+        history.pushState({ page: 'section', paper: paperType, section: sectionName }, '');
+    }
+
     const app = document.getElementById('app');
-    let displayName = currentPaper === 'GD' ? 'Army Agniveer GD' : 'Army Agniveer Tradesman';
+    let displayName = `Army Agniveer ${paperType}`;
     
     let html = `
-        <button class="back-btn" onclick="selectPaper('${currentPaper}')">⬅ पीछे जाएँ</button>
-        <h2 style="color: var(--gold); margin: 5px 0 15px 0; font-size: 18px;">${displayName} - ${sectionName}</h2>
+        <h2 style="color: var(--gold); margin: 15px 0 15px 0; font-size: 18px;">${displayName} - ${sectionName}</h2>
     `;
 
     if (sectionName === 'Subject Mock') {
@@ -98,14 +119,12 @@ function goToSection(sectionName) {
             <div class="list-container">
                 <div class="list-item" onclick="alert('Full Mock Test 1 लोड हो रहा है...')">🚀 Full Mock Test - 01 (50 प्रश्न)</div>
                 <div class="list-item" onclick="alert('Full Mock Test 2 लोड हो रहा है...')">🚀 Full Mock Test - 02 (50 प्रश्न)</div>
-                <div class="list-item" onclick="alert('Full Mock Test 3 लोड हो रहा है...')">🚀 Full Mock Test - 03 (50 प्रश्न)</div>
             </div>
         `;
     } else if (sectionName === 'Prev. Paper') {
         html += `
             <div class="list-container">
-                <div class="list-item" onclick="alert('Original Paper 2024 डाउनलोड/शुरू हो रहा है...')">📄 Original Paper (2024)</div>
-                <div class="list-item" onclick="alert('Original Paper 2023 डाउनलोड/शुरू हो रहा है...')">📄 Original Paper (2023)</div>
+                <div class="list-item" onclick="alert('Original Paper लोड हो रहा है...')">📄 Original Paper (2024)</div>
             </div>
         `;
     } else if (sectionName === 'Syllabus') {
@@ -113,10 +132,7 @@ function goToSection(sectionName) {
             <div style="background: var(--card-bg); padding: 15px; border-radius: 12px; font-size: 14px; line-height: 1.6; border: 1px solid #233565;">
                 <b style="color: var(--gold);">परीक्षा पैटर्न:</b><br>
                 • कुल प्रश्न: 50 | कुल अंक: 100<br>
-                • पासिंग मार्क्स: 35<br>
-                • नेगेटिव मार्किंग: 0.5 अंक<br><br>
-                <b style="color: var(--gold);">विषय विवरण:</b><br>
-                GK (15 प्रश्न), Science (15 प्रश्न), Maths (15 प्रश्न), Reasoning (5 प्रश्न)
+                • नेगेटिव मार्किंग: लागू
             </div>
         `;
     }
@@ -124,5 +140,20 @@ function goToSection(sectionName) {
     app.innerHTML = html;
 }
 
-// ऐप शुरू करें
+// 📱 फोन के हार्डवेयर बैक बटन को ट्रैक करने का सबसे जरूरी लॉजिक
+window.addEventListener('popstate', function(event) {
+    if (event.state) {
+        if (event.state.page === 'home') {
+            loadHomeScreen(false);
+        } else if (event.state.page === 'options') {
+            selectPaper(event.state.paper, false);
+        } else if (event.state.page === 'section') {
+            goToSection(event.state.section, false);
+        }
+    } else {
+        loadHomeScreen(false);
+    }
+});
+
+// पहली बार होम स्क्रीन लोड करना
 loadHomeScreen();
