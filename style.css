@@ -1,0 +1,119 @@
+:root {
+    --gold: #e5a93b;
+    --bg-dark: #0b132b;
+    --card-bg: #1c2541;
+    --btn-blue: #233565;
+    --text-white: #ffffff;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    font-family: sans-serif;
+    margin: 0;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.app-title {
+    text-align: center;
+    font-weight: bold;
+    color: var(--gold);
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+.app-subtitle {
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.paper-card {
+    background: var(--card-bg);
+    padding: 15px;
+    margin: 10px auto;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #233565;
+    max-width: 500px;
+}
+
+.paper-card:hover {
+    border-color: var(--gold);
+}
+
+.icon-badge {
+    background: var(--gold);
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 15px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+.opt-box {
+    background: var(--card-bg);
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #3a4f7c;
+}
+
+.list-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.mock-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+}
+
+.mock-btn {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid #233565;
+    text-align: center;
+    font-weight: bold;
+}
+
+.mock-btn:hover {
+    border-color: var(--gold);
+    background: var(--btn-blue);
+}
+
+.back-btn {
+    width: 100%;
+    max-width: 500px;
+    background: #4b5563;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    margin: 15px auto;
+    font-weight: bold;
+}
