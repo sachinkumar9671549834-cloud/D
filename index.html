@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>आर्मी GD - मॉक टेस्ट 1</title>
+    <!-- CSS फ़ाइल लिंक (आपकी style.css) -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* अगर आपकी style.css में कुछ छूट गया हो, तो यह बेसिक लेआउट को संभाल लेगा */
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #1565c0;
+            --dark-color: #333;
+            --light-bg: #f4f6f9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+            color: var(--dark-color);
+        }
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .lang-switch {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            background: #e8f5e9;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .question-box {
+            margin-bottom: 25px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+        .option-item {
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        .option-item:hover {
+            border-color: var(--secondary-color);
+            background: #e3f2fd;
+        }
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background: #e8f5e9;
+            font-weight: bold;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .btn-prev { background: #9e9e9e; color: white; }
+        .btn-next { background: var(--secondary-color); color: white; }
+        .btn-submit { background: #d32f2f; color: white; }
+        .btn:hover { opacity: 0.9; }
+        .result-box {
+            text-align: center;
+            display: none;
+        }
+        .score-card {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f1f8e9;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- हेडर सेक्शन -->
+    <header class="header">
+        <h2>Army GD Mock Test - 1</h2>
+        <div>
+            <!-- भाषा बदलने का बटन -->
+            <button class="lang-switch" id="langBtn" onclick="toggleLanguage()">English / हिंदी</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- टेस्ट चलने वाला बॉक्स -->
+        <div id="quiz-box">
+            <div class="quiz-meta">
+                <span id="q-count">प्रगति: Q 1/50</span>
+                <span id="timer" style="color: #d32f2f;">समय शेष: 60:00</span>
+            </div>
+
+            <div class="question-box">
+                <div class="question-text" id="q-text">प्रश्न यहाँ लोड होगा...</div>
+                <ul class="options-list" id="options-container">
+                    <!-- ऑप्शन्स जावास्क्रिप्ट से यहाँ आयेंगे -->
+                </ul>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()" disabled>पिछला</button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">अगला</button>
+                <button class="btn btn-submit" id="submitBtn" onclick="submitQuiz()" style="display:none;">सबमिट टेस्ट</button>
+            </div>
+        </div>
+
+        <!-- रिजल्ट दिखाने वाला बॉक्स -->
+        <div id="result-box" class="result-box">
+            <h2>टेस्ट का परिणाम (Result)</h2>
+            <div class="score-card">
+                <p>कुल प्रश्न: <span id="total-q">50</span></p>
+                <p>सही उत्तर: <span id="correct-ans">0</span></p>
+                <p>गलत उत्तर: <span id="wrong-ans">0</span></p>
+                <p>प्राप्त अंक (Marks): <span id="final-marks">0</span> / 100</p>
+            </div>
+            <button class="btn btn-next" onclick="location.reload()">दोबारा टेस्ट दें</button>
+        </div>
+    </div>
+
+    <!-- डेटा फ़ाइल सबसे पहले लोड होगी (पाथ को सीधा रूट पर रखा है जैसा GitHub पर है) -->
+    <script src="gd_mock_1.js"></script>
+
+    <!-- आपकी लॉजिक वाली जावास्क्रिप्ट फ़ाइल जो इस डेटा को चलाएगी -->
+    <script src="script.js"></script>
+
+</body>
+</html>
